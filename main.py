@@ -1,5 +1,5 @@
 from src.config.server import server
-from src.controllers.userController import *
+from controllers.authController import *
 
 if __name__ == '__main__':
     server.run()
