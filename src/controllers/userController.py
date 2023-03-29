@@ -1,7 +1,7 @@
 from flask_restx import Resource
 from src.services.TokenService import TokenService
 from src.services.RegisterService import RegisterService
-from src.models.User import user
+from src.schemas.User import user
 from src.config.server import server
 api = server.api
 
