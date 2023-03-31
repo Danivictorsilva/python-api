@@ -1,28 +1,24 @@
-from datetime import datetime, timedelta
+from bson import json_util
+from flask import Response
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
+from src.config.database import db
 from dotenv import dotenv_values
 envVariables = dotenv_values(".env")
-import jwt
-from src.config.database import db
 userCollection = db.users
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
-from flask import Response
-from bson import json_util
+
 
 class AuthService:
     @classmethod
-    def generateToken(cls, username, password):
+    def verifyUser(cls, username, password):
         user = userCollection.find_one({'username': username})
         if user:
             if check_password_hash(user['password'], password):
-                return {'access_token': jwt.encode({
-                    'user_id': str(user['_id']),
-                    'exp': datetime.utcnow() + timedelta(minutes=30)
-                }, str(envVariables['TOKEN_SECRET']))}, 200
+                return True
             else:
-                return {'error': ['invalid username or password']}, 400
+                return False
         else:
-            return {'error': ['invalid username or password']}, 400
+            return False
 
     @classmethod
     def register(cls, username, password):

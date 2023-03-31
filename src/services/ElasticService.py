@@ -17,7 +17,7 @@ class ElasticService:
         res = es.index(index='python-elasticsearch',
                        id=str(uuid4()), document=doc)
 
-        print(res['result'])
+        # print(res['result'])
 
     @classmethod
     def getUserLogs(cls, username):
