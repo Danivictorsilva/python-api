@@ -25,6 +25,6 @@ class WeatherService:
                 'http://servicos.cptec.inpe.br/XML/cidade/{city_id}/previsao.xml'.format(city_id=city_id))
             fetchForecastResponseJson = xmltodict.parse(
                 fetchForecastResponse.content)
-            return {**fetchCepResponseJson, **fetchForecastResponseJson}, 200
+            return {**fetchCepResponseJson, **fetchForecastResponseJson}
         else:
-            return {'error': ['invalid cep']}, 400
+            return None

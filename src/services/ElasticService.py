@@ -23,4 +23,4 @@ class ElasticService:
         res = es.search(index='python-elasticsearch',
                         query={'match': {'username': username}})
 
-        return list(map(lambda x: x['_source'], res['hits']['hits'])), 200
+        return list(map(lambda x: x['_source'], res['hits']['hits']))

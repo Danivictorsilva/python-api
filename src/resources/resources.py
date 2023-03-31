@@ -57,7 +57,11 @@ class WeatherResource(Resource):
     @saveLog
     def post(self):
         cep = api.payload['cep']
-        return WeatherService.FourDaysForecast(cep)
+        data = WeatherService.FourDaysForecast(cep)
+        if data:
+          return {'success': 'true', 'data': data}, 200
+        else:
+            return {'success': 'false', 'error': 'Bad Request'}, 400
 
 
 @api.route('/api/logs')
@@ -65,7 +69,11 @@ class LoggerResource(Resource):
     @jwt_required()
     @api.doc(security='apikey')
     def get(self):
-        return ElasticService.getUserLogs(get_jwt_identity())
+        data = ElasticService.getUserLogs(get_jwt_identity())
+        if data:
+          return {'success': 'true', 'data': data}, 200
+        else:
+            return {'success': 'false', 'error': 'Username already exists'}, 400
 
 
 
