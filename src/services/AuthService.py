@@ -5,12 +5,14 @@ import jwt
 from src.config.database import db
 userCollection = db.users
 from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash
+from flask import Response
+from bson import json_util
 
-class TokenService:
+class AuthService:
     @classmethod
-    def generate(cls, username, password):
+    def generateToken(cls, username, password):
         user = userCollection.find_one({'username': username})
-
         if user:
             if check_password_hash(user['password'], password):
                 return {'access_token': jwt.encode({
@@ -21,3 +23,15 @@ class TokenService:
                 return {'error': ['invalid username or password']}, 400
         else:
             return {'error': ['invalid username or password']}, 400
+
+    @classmethod
+    def register(cls, username, password):
+        user = userCollection.find_one({'username': username})
+        if user:
+            return {'error': ['username already exists']}, 400
+        hashed_password = generate_password_hash(password)
+        userCollection.insert_one(
+            {'username': username, 'password': hashed_password})
+        user = userCollection.find_one({'username': username})
+        response = json_util.dumps(user)
+        return Response(response, mimetype="application/json", status=201)
