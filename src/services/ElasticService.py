@@ -6,18 +6,17 @@ es = Elasticsearch('http://127.0.0.1:9200')
 
 class ElasticService:
     @classmethod
-    def storeRequest(cls, username, endpoint, method, payload):
+    def storeRequest(cls, username, requestPayload, requestHeaders):
         doc = {
             'username': username,
-            'req_url': endpoint,
-            'req_method': method,
-            'payload': payload,
+            'req_payload': requestPayload,
+            'req_headers': requestHeaders,
             'timestamp': datetime.now()
         }
         res = es.index(index='python-elasticsearch',
-                       id=str(uuid4()), document=doc)
+                       id=uuid4().hex, document=doc)
 
-        # print(res['result'])
+        print(res['result'])
 
     @classmethod
     def getUserLogs(cls, username):
