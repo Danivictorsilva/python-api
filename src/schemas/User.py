@@ -1,7 +1,5 @@
-from src.config.server import server
+from src.config.app import api
 from flask_restx import fields
-
-api = server.api
 
 class User:
   def __init__(self):
