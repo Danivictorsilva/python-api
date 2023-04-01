@@ -1,9 +1,6 @@
-from bson import json_util
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from src.config.database import db
-from dotenv import dotenv_values
-envVariables = dotenv_values(".env")
 userCollection = db.users
 
 class AuthService:

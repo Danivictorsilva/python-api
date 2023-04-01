@@ -2,7 +2,7 @@ from uuid import uuid4
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
-es = Elasticsearch('http://127.0.0.1:9200')
+es = Elasticsearch([{'host': 'elastic', 'port': 9200}])
 
 class ElasticService:
     @classmethod
@@ -15,8 +15,6 @@ class ElasticService:
         }
         res = es.index(index='python-elasticsearch',
                        id=uuid4().hex, document=doc)
-
-        print(res['result'])
 
     @classmethod
     def getUserLogs(cls, username):

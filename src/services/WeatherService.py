@@ -2,7 +2,6 @@ import requests
 from unidecode import unidecode
 import xmltodict
 
-
 class WeatherService:
     @classmethod
     def FourDaysForecast(cls, cep):

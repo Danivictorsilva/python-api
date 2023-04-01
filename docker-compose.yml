@@ -1,0 +1,45 @@
+version: '1.0'
+services:
+  db:
+      image: mongo:latest
+      container_name: mongodb
+      ports:
+        - "27017:27017"
+
+  elastic:
+    build: elasticsearch/
+    container_name: elasticsearch
+    ports:
+        - "9200:9200"
+        - "9300:9300"
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=false
+      - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
+      - discovery.type=single-node
+    mem_limit: 2g
+    networks:
+      - elk
+
+    healthcheck:
+      test: "curl http://elasticsearch:9200"
+      interval: "1s"
+      timeout: "3s"
+      retries: 60
+
+  app:
+    container_name: flask-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - elastic
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
