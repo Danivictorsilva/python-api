@@ -5,6 +5,11 @@ services:
       container_name: mongodb
       ports:
         - "27017:27017"
+      restart: always
+      environment:
+        MONGO_INITDB_DATABASE: flask_api_db
+      networks:
+        - database
 
   elastic:
     build: elasticsearch/
@@ -39,7 +44,11 @@ services:
       - elastic
     networks:
       - elk
+      - database
 
 networks:
   elk:
     driver: bridge
+  database:
+    driver: bridge
+
